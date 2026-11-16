@@ -1,0 +1,13 @@
+---
+// Seller cabinet. All logic is in src/scripts/seller.ts.
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Кабинет продавца — TAILA" description="Откройте бесплатную страницу магазина одежды на TAILA.">
+  <div id="app">
+    <div class="narrow"><p class="muted" data-t="loading">Загрузка…</p></div>
+  </div>
+  <script>
+    import '../scripts/seller.ts';
+  </script>
+</Base>

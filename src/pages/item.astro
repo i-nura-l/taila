@@ -1,0 +1,16 @@
+---
+// Product page with the reserve button: /item/?id=<product id>
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Товар — TAILA">
+  <div class="wrap" id="app">
+    <div class="item">
+      <div class="card skeleton"><div class="ph"></div></div>
+      <div><h1 class="muted" style="font-size:1.4rem" data-t="loading">Загрузка…</h1></div>
+    </div>
+  </div>
+  <script>
+    import '../scripts/item.ts';
+  </script>
+</Base>

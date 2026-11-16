@@ -1,0 +1,16 @@
+---
+// Public shop page: /shop/?s=<shop address>
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Магазин — TAILA">
+  <div class="wrap" id="app">
+    <div class="shophead"><h1 class="muted" style="font-size:1.4rem" data-t="loading">Загрузка…</h1></div>
+    <div class="grid">
+      {Array.from({ length: 4 }).map(() => <div class="card skeleton"><div class="ph"></div></div>)}
+    </div>
+  </div>
+  <script>
+    import '../scripts/shop.ts';
+  </script>
+</Base>

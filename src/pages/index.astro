@@ -1,0 +1,70 @@
+---
+// Home: pick your size, see what is in stock across shops.
+import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+
+<Base title="TAILA — ваш размер в магазинах Бишкека">
+  <section class="hero">
+    <div class="wrap">
+      <h1 data-t="home.h1">Ваш размер есть в магазине рядом</h1>
+      <p class="lead" data-t="home.lead">
+        Смотрите, что сегодня в наличии в магазинах Бишкека, и бронируйте вещь до поездки.
+      </p>
+      <div class="picker">
+        <div class="picker-label" data-t="home.pick">Какой у вас размер?</div>
+        <div class="tags" id="sizes" aria-label="Размер"></div>
+      </div>
+      <form class="searchbar" id="search" role="search">
+        <input class="input" id="q" type="search" enterkeyhint="search" autocomplete="off"
+          placeholder="Платье, пальто, чепкен…" data-t-ph="home.search" aria-label="Поиск" />
+        <button class="btn" type="submit" data-t="home.find">Найти</button>
+      </form>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="filters">
+      <div class="scroller" id="cats"></div>
+      <div class="scroller" id="districts"></div>
+    </div>
+    <div class="small muted" id="summary" aria-live="polite"></div>
+    <div class="grid" id="grid">
+      {Array.from({ length: 6 }).map(() => <div class="card skeleton"><div class="ph"></div></div>)}
+    </div>
+    <div id="more-wrap" hidden>
+      <button class="btn ghost block" id="more" type="button" data-t="home.more">Показать ещё</button>
+    </div>
+
+    <section class="section">
+      <h2 data-t="home.shops">Магазины</h2>
+      <div class="shoplist" id="shops"></div>
+    </section>
+
+    <section class="section">
+      <div class="band">
+        <div>
+          <h2 data-t="home.cta.h">Продаёте одежду? Откройте страницу магазина за 5 минут</h2>
+          <p style="margin-top:8px" data-t="home.cta.p">
+            Бесплатно. Покупатель видит размеры в наличии и бронирует, вы получаете заявку.
+          </p>
+          <a class="btn" style="margin-top:16px" href={`${base}seller/`} data-t="home.cta.btn">Открыть магазин бесплатно</a>
+        </div>
+        <ol>
+          <li data-t="home.cta.1">Добавьте товары и размеры с телефона</li>
+          <li data-t="home.cta.2">Поставьте ссылку в шапку Instagram</li>
+          <li data-t="home.cta.3">Получайте брони и отмечайте выдачу</li>
+        </ol>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    import '../scripts/home.ts';
+  </script>
+</Base>
+
+<style is:global>
+  .hero .btn { background: #fff; color: var(--plum); border-color: #fff; }
+  .hero .btn:hover { background: var(--mist); }
+</style>

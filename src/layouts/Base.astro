@@ -1,0 +1,67 @@
+---
+// The frame around every page: head tags, top bar, footer.
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const {
+  title,
+  description = 'TAILA — страницы магазинов одежды Бишкека: размеры в наличии сегодня и бронь до поездки.',
+} = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#4a3561" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(`${base}icon-512.png`, Astro.site).href} />
+    <link rel="icon" href={`${base}favicon.png`} type="image/png" />
+    <link rel="apple-touch-icon" href={`${base}icon-192.png`} />
+    <link rel="manifest" href={`${base}manifest.webmanifest`} />
+    <link rel="preconnect" href="https://ssewcrbyowphbrdjzucf.supabase.co" crossorigin />
+    <!-- Avoid a flash of Russian text for people who chose Kyrgyz. -->
+    <script is:inline>
+      try {
+        if (localStorage.getItem('taila_lang') === 'ky') {
+          document.documentElement.lang = 'ky';
+          document.documentElement.classList.add('ky-pending');
+          setTimeout(function () { document.documentElement.classList.remove('ky-pending'); }, 1500);
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap">
+        <a class="logo" href={base} aria-label="TAILA">
+          <img src={`${base}logo.webp`} alt="taila" width="54" height="38" />
+        </a>
+        <a class="navlink" href={`${base}my/`} data-t="nav.my">Мои брони</a>
+        <a class="navlink" href={`${base}seller/`} data-t="nav.seller">Продавцам</a>
+        <button class="lang" id="lang" type="button">Кыргызча</button>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="foot">
+      <div class="wrap">
+        <span data-t="foot.about">TAILA — страницы магазинов одежды Бишкека с размерами в наличии.</span>
+        <span>taila.page</span>
+      </div>
+    </footer>
+    <script>
+      import { initI18n } from '../i18n';
+      initI18n();
+    </script>
+  </body>
+</html>

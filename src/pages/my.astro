@@ -1,0 +1,15 @@
+---
+// "My reservations". Shoppers have no account: the list lives in their phone.
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Мои брони — TAILA">
+  <div class="wrap" style="max-width:560px;padding-top:22px;padding-bottom:40px">
+    <h1 style="font-size:1.7rem" data-t="my.h">Мои брони</h1>
+    <p class="small muted" style="margin-top:6px" data-t="my.note">Брони хранятся в этом телефоне.</p>
+    <div id="app"><p class="muted" style="margin-top:20px" data-t="loading">Загрузка…</p></div>
+  </div>
+  <script>
+    import '../scripts/my.ts';
+  </script>
+</Base>
