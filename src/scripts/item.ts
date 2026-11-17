@@ -118,7 +118,7 @@ app.addEventListener('submit', async (ev) => {
     saveToken(done.token);
     try { localStorage.setItem('taila_name', name); localStorage.setItem('taila_phone', phone); } catch { /* private mode */ }
     draw();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelector('.slip')?.scrollIntoView({ block: 'center' }); // show the code straight away
   } catch (e) {
     err.textContent = errText(e);
     err.hidden = false;

@@ -19,10 +19,19 @@ jobs:
         with:
           node-version: 22
       - run: npm install --no-audit --no-fund
+      - name: Choose the site address
+        # With a CNAME file the site lives at the root of that domain (taila.page);
+        # without it, at <user>.github.io/<repo>/.
+        run: |
+          if [ -f CNAME ]; then
+            echo "SITE_BASE=/" >> "$GITHUB_ENV"
+            echo "SITE_URL=https://$(tr -d '[:space:]' < CNAME)" >> "$GITHUB_ENV"
+          else
+            echo "SITE_BASE=/${GITHUB_REPOSITORY#*/}/" >> "$GITHUB_ENV"
+            echo "SITE_URL=https://${GITHUB_REPOSITORY_OWNER}.github.io" >> "$GITHUB_ENV"
+          fi
       - run: npm run build
-        env:
-          SITE_BASE: /taila/
-          SITE_URL: https://i-nura-l.github.io
+      - run: if [ -f CNAME ]; then cp CNAME dist/CNAME; fi
       - name: Report JavaScript and page sizes
         run: |
           echo "Largest files in the build:"

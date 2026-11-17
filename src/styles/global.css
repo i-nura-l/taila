@@ -127,7 +127,7 @@ textarea.input { min-height: 96px; resize: vertical; }
 @media (min-width: 820px) { .item { grid-template-columns: 1fr 1fr; gap: 36px; padding-bottom: 40px; } }
 .gallery { display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; border-radius: var(--r); scrollbar-width: none; }
 .gallery::-webkit-scrollbar { display: none; }
-.gallery img { flex: 0 0 100%; aspect-ratio: 3 / 4; object-fit: cover; scroll-snap-align: start; background: var(--mist); border-radius: var(--r); }
+.gallery img { flex: 0 0 100%; aspect-ratio: 3 / 4; max-height: 56vh; object-fit: cover; scroll-snap-align: start; background: var(--mist); border-radius: var(--r); }
 .price { font-size: 1.6rem; font-weight: 780; margin-top: 6px; }
 .price s { font-size: 1rem; font-weight: 500; color: var(--muted); margin-left: 8px; }
 .fresh { margin-top: 10px; font-size: 0.9rem; }
@@ -169,8 +169,10 @@ textarea.input { min-height: 96px; resize: vertical; }
 .photos .slot img { width: 100%; height: 100%; object-fit: cover; }
 .photos .slot button { position: absolute; top: 3px; right: 3px; width: 26px; height: 26px; border-radius: 50%; border: 0; background: rgba(36, 22, 52, 0.75); color: #fff; cursor: pointer; }
 .photos label.add { width: 78px; height: 104px; border: 1.5px dashed var(--purple); border-radius: 10px; display: grid; place-items: center; color: var(--purple); font-size: 1.7rem; cursor: pointer; }
-.vrow { display: grid; grid-template-columns: 1fr 1.2fr auto auto; gap: 8px; align-items: center; margin-top: 8px; }
+.vrow { display: grid; grid-template-columns: 76px minmax(0, 1fr) auto auto; gap: 8px; align-items: center; margin-top: 8px; }
 .vrow .input { min-height: 44px; padding: 8px 10px; }
+.vrow .stepper button { width: 34px; }
+@media (min-width: 820px) { .gallery img { max-height: none; } }
 .iconbtn { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: #fff; cursor: pointer; }
 .toast { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 12px 18px; border-radius: 12px; font-weight: 600; font-size: 0.92rem; z-index: 60; max-width: 90vw; text-align: center; }
 .foot { border-top: 1px solid var(--line); margin-top: 30px; padding: 22px 0 34px; color: var(--muted); font-size: 0.86rem; }

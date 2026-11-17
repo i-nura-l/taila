@@ -1,0 +1,15 @@
+---
+// Shown for any address that does not exist.
+import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+
+<Base title="Страница не найдена — TAILA">
+  <div class="wrap">
+    <div class="empty" style="margin-top:40px">
+      <h3>Такой страницы нет</h3>
+      <p class="muted">Проверьте ссылку или начните с главной.</p>
+      <div style="margin-top:14px"><a class="btn small" href={base}>На главную</a></div>
+    </div>
+  </div>
+</Base>
