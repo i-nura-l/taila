@@ -8,9 +8,9 @@
   --line: #ddd5ea;
   --muted: #6f6480;
   --gold: #a9834a;     /* thread accent, used sparingly */
-  --ok: #2e7d5b;
-  --warn: #a8581f;
-  --bad: #b23a48;
+  --ok: #24684b;
+  --warn: #8a4512;
+  --bad: #a3303e;
   --r: 14px;
   --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', Arial, sans-serif;
 }
@@ -171,9 +171,22 @@ textarea.input { min-height: 96px; resize: vertical; }
 .photos label.add { width: 78px; height: 104px; border: 1.5px dashed var(--purple); border-radius: 10px; display: grid; place-items: center; color: var(--purple); font-size: 1.7rem; cursor: pointer; }
 .vrow { display: grid; grid-template-columns: 76px minmax(0, 1fr) auto auto; gap: 8px; align-items: center; margin-top: 8px; }
 .vrow .input { min-height: 44px; padding: 8px 10px; }
-.vrow .stepper button { width: 34px; }
+.vrow .stepper button { width: 40px; height: 44px; }
 @media (min-width: 820px) { .gallery img { max-height: none; } }
 .iconbtn { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: #fff; cursor: pointer; }
 .toast { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 12px 18px; border-radius: 12px; font-weight: 600; font-size: 0.92rem; z-index: 60; max-width: 90vw; text-align: center; }
 .foot { border-top: 1px solid var(--line); margin-top: 30px; padding: 22px 0 34px; color: var(--muted); font-size: 0.86rem; }
 .foot .wrap { display: flex; flex-wrap: wrap; gap: 8px 18px; justify-content: space-between; }
+
+/* Size picker: one row per kind of size (clothes / shoes / kids). */
+.sizegroup { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; width: 100%; }
+.sizegroup + .sizegroup { margin-top: 6px; }
+.sg-label { font-size: 0.8rem; font-weight: 600; opacity: 0.85; min-width: 64px; }
+/* Text pages (privacy). */
+.prose h2 { font-size: 1.1rem; margin-top: 22px; }
+.prose p { margin: 8px 0 0; }
+/* Bigger tap targets for the quick-size buttons in the product editor. */
+.sheet .tag.mini[data-quick] { min-height: 40px !important; min-width: 44px; font-size: 0.85rem; }
+/* Never scroll sideways on narrow phones. */
+html, body { overflow-x: clip; }
+.linkbox { min-width: 0; flex-wrap: wrap; }

@@ -25,7 +25,22 @@ let reservations: ResRow[] = [];
 let draft: Draft | null = null;
 let authMode: 'in' | 'up' = 'in';
 let telegramOn = false;
+let members = 0;
+let inviteLink = '';
 let timer = 0;
+
+// Invite links (?invite=CODE) hand a shop to its real owner. The code waits in this
+// phone until the person has signed in, then it is accepted once.
+const INVITE_KEY = 'taila_invite';
+(() => {
+  const code = new URLSearchParams(location.search).get('invite');
+  if (!code) return;
+  try { localStorage.setItem(INVITE_KEY, code); } catch { /* private mode */ }
+  history.replaceState(null, '', location.pathname);
+})();
+function pendingInvite(): string {
+  try { return localStorage.getItem(INVITE_KEY) || ''; } catch { return ''; }
+}
 
 const field = (label: string, inner: string, hint = '') =>
   `<label class="field"><span>${esc(label)}</span>${inner}${hint ? `<span class="hint" style="font-weight:400">${hint}</span>` : ''}</label>`;
@@ -225,6 +240,16 @@ function shopHtml(): string {
   <div class="panel"><h3>${esc(t('sh.tg.h'))}</h3>
     ${telegramOn ? `<p style="margin-top:8px"><span class="badge ok">${esc(t('sh.tg.on'))}</span></p>` : `<button class="btn ghost" style="margin-top:12px" id="tg" type="button">${esc(t('sh.tg.btn'))}</button><p class="hint" id="tg-note"></p>`}
   </div>
+  <div class="panel"><h3>${esc(t('inv.h'))}</h3>
+    <p class="small muted" style="margin-top:6px">${esc(t('inv.count', { n: members || 1 }))}</p>
+    <p class="hint">${esc(t('inv.p'))}</p>
+    ${inviteLink ? `<div class="linkbox"><code>${esc(inviteLink.replace(/^https?:\/\//, ''))}</code>
+      <button class="btn small" id="inv-copy" type="button">${esc(t('d.link.copy'))}</button></div>
+      <p class="hint">${esc(t('inv.once'))}</p>
+      <a class="btn small ghost" style="margin-top:8px" href="https://wa.me/?text=${encodeURIComponent(t('inv.msg', { s: s.name, l: inviteLink }))}" target="_blank" rel="noopener">${esc(t('inv.wa'))}</a>`
+    : `<button class="btn ghost" style="margin-top:12px" id="inv" type="button">${esc(t('inv.btn'))}</button>`}
+    ${members > 1 ? `<button class="btn small danger" style="margin-top:12px;display:flex" id="leave" type="button">${esc(t('inv.leave'))}</button>` : ''}
+  </div>
   <button class="btn ghost block" style="margin-top:14px" id="signout" type="button">${esc(t('sh.out'))}</button>`;
 }
 
@@ -405,6 +430,19 @@ document.addEventListener('click', async (ev) => {
         closeEditor(); toast(t('e.deleted')); await loadProducts(); drawDash(); return;
       }
     }
+    if (hit('#inv') && shop) {
+      const code = check(await sb.rpc('create_shop_invite', { p_shop_id: shop.id })) as string;
+      inviteLink = `${here}?invite=${code}`;
+      drawDash(); return;
+    }
+    if (hit('#inv-copy')) { await navigator.clipboard.writeText(inviteLink); toast(t('d.link.copied')); return; }
+    const leave = hit<HTMLButtonElement>('#leave');
+    if (leave && shop) {
+      if (!leave.dataset.sure) { leave.dataset.sure = '1'; leave.textContent = t('inv.leave2'); return; }
+      check(await sb.rpc('leave_shop', { p_shop_id: shop.id }));
+      try { localStorage.removeItem('taila_shop'); } catch { /* ignore */ }
+      toast(t('inv.left')); await route(); return;
+    }
     if (hit('#tg') && shop) {
       const url = check(await sb.rpc('telegram_connect_link', { p_shop_id: shop.id })) as string | null;
       if (url) window.open(url, '_blank', 'noopener'); else $('#tg-note').textContent = t('sh.tg.soon');
@@ -447,6 +485,7 @@ document.addEventListener('change', (ev) => {
   if (el.id === 'e-file' && el.files?.length) void addPhotos(el.files);
   if (el.id === 'switch') {
     shop = shops.find((s) => s.id === el.value) || shop;
+    inviteLink = ''; members = 0;
     try { localStorage.setItem('taila_shop', shop!.id); } catch { /* ignore */ }
     void refresh(true);
   }
@@ -461,17 +500,30 @@ async function refresh(force = false): Promise<void> {
     if (tab === 'shop') {
       const row = check(await sb.from('shop_private').select('telegram_chat_id').eq('shop_id', shop.id).maybeSingle()) as { telegram_chat_id: number | null } | null;
       telegramOn = !!row?.telegram_chat_id;
+      members = (check(await sb.rpc('shop_member_count', { p_shop_id: shop.id })) as number | null) || 1;
     }
     // Do not redraw while the seller is typing in the shop form.
     if (!(tab === 'shop' && document.activeElement && $('#shopform')?.contains(document.activeElement))) drawDash();
   } catch (e) { fail(e); }
 }
 
+async function acceptInvite(): Promise<void> {
+  const code = pendingInvite();
+  if (!code) return;
+  try { localStorage.removeItem(INVITE_KEY); } catch { /* ignore */ }
+  try {
+    const got = check(await sb.rpc('accept_shop_invite', { p_code: code })) as { id: string; name: string };
+    try { localStorage.setItem('taila_shop', got.id); } catch { /* ignore */ }
+    toast(t('inv.joined', { s: got.name }));
+  } catch (e) { toast(errText(e)); }
+}
+
 async function route(): Promise<void> {
   clearInterval(timer);
   const { data } = await sb.auth.getSession();
-  if (!data.session) { shop = null; closeEditor(); drawAuth(); return; }
+  if (!data.session) { shop = null; closeEditor(); drawAuth(pendingInvite() ? t('inv.signin') : ''); return; }
   try {
+    await acceptInvite();
     await loadShops();
     if (!shop) { drawOnboard(); return; }
     await Promise.all([loadReservations(), loadProducts()]);

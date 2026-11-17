@@ -12,6 +12,7 @@ stock was last confirmed, and a reserve button.
 | `src/pages/item.astro` | Product page with the reserve form, `/item/?id=<id>` |
 | `src/pages/my.astro` | A shopper's reservations (kept in their phone, no account) |
 | `src/pages/seller.astro` | Seller cabinet: sign in, products, stock, reservations |
+| `src/pages/privacy.astro` | Privacy notice (fill `CONTACT` in `src/config.ts` before real shoppers) |
 | `src/scripts/` | The code behind each page |
 | `src/lib/api.ts`, `src/lib/ui.ts` | Shared helpers (database calls, product card, reservation slip) |
 | `src/i18n.ts` | All interface text, Russian and Kyrgyz |
@@ -35,6 +36,8 @@ npm run dev        # http://localhost:4321
   step, so two people cannot reserve the last piece.
 - Sellers read and change only their own shop (row-level security on every table).
 - Shoppers see "in stock / last one", not exact counts.
+- Founder-led onboarding: set up a shop, then Shop settings > Invite owner sends a one-time
+  link (7 days). The owner signs in through it; then you can leave the shop.
 
 ## Deploy
 

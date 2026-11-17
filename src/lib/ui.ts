@@ -81,6 +81,7 @@ export function slip(r: Reservation, opts: { heading?: boolean } = {}): string {
   const where = [s.district, s.address].filter(Boolean).join(', ');
   return `<div class="slip" data-token="${esc(r.token)}">
     ${opts.heading ? `<h2>${esc(t('slip.title'))}</h2><p class="muted small" style="margin-top:4px">${esc(t('slip.say'))}</p>` : ''}
+    ${opts.heading && active && wa ? `<p class="notice" style="margin-top:10px">${esc(t('slip.next'))}</p>` : ''}
     <div class="code">${esc(r.code)}</div>
     <div>${statusBadge(r.status)}</div>
     <dl>

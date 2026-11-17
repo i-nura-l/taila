@@ -50,6 +50,7 @@ function draw(): void {
           <p class="error" id="err" hidden></p>
           <button class="btn block" style="margin-top:16px" type="submit">${esc(t('form.send'))}</button>
           <p class="hint">${esc(t('item.hold', { h: s.hold_hours }))}</p>
+          <p class="hint">${esc(t('form.consent'))} <a href="${BASE}privacy/">${esc(t('form.privacy'))}</a></p>
         </form>`
       : `<button class="btn block" id="open" type="button">${esc(chosen ? t('item.reserve.size', { s: chosen.size }) : t('item.choose'))}</button>
          <p class="hint">${esc(t('item.hold', { h: s.hold_hours }))}</p>`;
